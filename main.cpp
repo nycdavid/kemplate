@@ -15,8 +15,7 @@ int main() {
   map<string, string> foo;
   foo.insert(std::pair<string, string>("name", "David"));
   foo.insert(std::pair<string, string>("favorite_hobby", "music production"));
-  string kemplate = kemplatify(tmpl, foo);
-
+  kemplatify(tmpl, foo);
   std::cout << tmpl << std::endl;
   return 0;
 }
