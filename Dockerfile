@@ -1,3 +1,3 @@
-FROM cpp-env:latest
+FROM davidko/cpp-env:base
 
 WORKDIR app/
