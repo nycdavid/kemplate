@@ -14,4 +14,4 @@ test:
 	-v $(shell pwd)/src:/app/src \
 	--rm \
 	cppgd:latest \
-	/bin/bash -c "g++ -std=c++11 -o /app/tests/some_test /app/src/*.cc /app/tests/*_test.cc && /app/tests/some_test && rm /app/tests/some_test"
+	/bin/bash -c "g++ -std=c++11 -o /app/tests/some_test /app/tests/*_test.cc /app/src/*.* && /app/tests/some_test && rm /app/tests/some_test"
