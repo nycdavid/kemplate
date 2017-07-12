@@ -1,7 +1,11 @@
 #include <map>
+#include <regex>
 #include <iostream>
-using std::string;
+
 using std::map;
+using std::regex;
+using std::sregex_iterator;
+using std::string;
 
 #ifndef KEMPLATE_H
 #define KEMPLATE_H
@@ -12,6 +16,9 @@ class Kemplate {
     string GetTemplate();
   private:
     string m_tmpl;
-    string interpolate(string key, string value, int length, string &pTmpl);
+    regex m_regex;
+    string interpolate(string key, string value, string &pTmpl);
+    string handlebarsToKey(string point);
+    sregex_iterator regexDataPoints();
 };
 #endif

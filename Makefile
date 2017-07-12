@@ -7,9 +7,10 @@ compile:
 	-v $(shell pwd):/app \
 	--rm \
 	cppgd:latest \
-	/bin/ash -c "g++ -std=c++11 -o /app/runProg ${FNAME} && /app/runProg"
+	/bin/bash -c "g++ -std=c++11 -o /app/runProg ${FNAME} && /app/runProg"
 test:
 	docker run \
+	-it \
 	-v $(shell pwd)/tests:/app/tests \
 	-v $(shell pwd)/src:/app/src \
 	--rm \
