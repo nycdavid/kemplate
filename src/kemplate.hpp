@@ -17,7 +17,7 @@ class Kemplate {
   private:
     string m_tmpl;
     regex m_regex;
-    string interpolate(string key, string value, string &pTmpl);
+    string interpolate(string barsKey, map<string, string> data, string &pTmpl);
     string handlebarsToKey(string point);
     sregex_iterator regexDataPoints();
 };

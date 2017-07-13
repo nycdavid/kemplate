@@ -51,6 +51,16 @@ TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
 
     REQUIRE(k.Html(data) == "<html>David Ko: Software Engineer<p></p></html>");
   }
+
+  SECTION("interpolates a Handlebars datapoint with whitespace between the key and the brace") {
+    map<string, string> data;
+    data["name"] = "David Ko";
+    data["job"] = "Software Engineer";
+    string tmpl = "<html>{{ name}}: {{job }}<p>{{foo  }}</p></html>";
+    Kemplate k(tmpl);
+
+    REQUIRE(k.Html(data) == "<html>David Ko: Software Engineer<p></p></html>");
+  }
 }
 
 TEST_CASE("Kemplate#GetTemplate", "calling k.GetTemplate()") {

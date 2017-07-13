@@ -13,7 +13,7 @@ using std::string;
 // Constructor
 Kemplate::Kemplate(string tmpl) {
   m_tmpl = tmpl;
-  m_regex = regex("\\{\\{[a-zA-Z_]*\\}\\}");
+  m_regex = regex("\\{\\{[a-zA-Z_\\s]*\\}\\}");
 }
 
 string Kemplate::Html(map<string, string> data) {
@@ -22,8 +22,8 @@ string Kemplate::Html(map<string, string> data) {
   sregex_iterator begin = regexDataPoints();
   for (sregex_iterator i = begin; i != sregex_iterator(); ++i) {
     std::smatch match = *i;
-    string key = handlebarsToKey(match.str());
-    result = interpolate(key, data[key], m_tmplCopy);
+    string barsKey = match.str();
+    result = interpolate(barsKey, data, m_tmplCopy);
   }
   return result;
 }
@@ -32,15 +32,16 @@ string Kemplate::GetTemplate() {
   return m_tmpl;
 }
 
-string Kemplate::interpolate(string key, string value, string &pTmpl) {
-  string barsKey = "{{" + key + "}}";
+string Kemplate::interpolate(string barsKey, map<string, string> data, string &pTmpl) {
+  string strippedKey = handlebarsToKey(barsKey);
+  string value = data[strippedKey];
   std::size_t foundPos = pTmpl.find(barsKey);
   pTmpl.replace(foundPos, barsKey.size(), value);
   return pTmpl;
 }
 
 string Kemplate::handlebarsToKey(string point) {
-  regex k("\\{\\{([a-zA-Z_]*)\\}\\}");
+  regex k("\\{\\{\\s*([a-zA-Z_]*)\\s*\\}\\}");
   std::smatch m;
   std::regex_search(point, m, k);
   return m[1];
