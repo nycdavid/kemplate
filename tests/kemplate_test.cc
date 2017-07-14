@@ -61,6 +61,16 @@ TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
 
     REQUIRE(k.Html(dpt) == "<html>David Ko: Software Engineer<p></p></html>");
   }
+
+  SECTION("interpolates and iterates through a Handlebars array") {
+    vector<string> hobbies = {"music", "programming", "reading"};
+    map<string, vector<string>> data;
+    data["hobbies"] = hobbies;
+    string tmpl = "<html><ul>{{#each hobbies}}<li>{{hobby}}</li>{{/each}}</ul></html>";
+    Kemplate k(tmpl);
+
+    REQUIRE(k.Html(data) == "<html><ul><li>music</li><li>programming</li><li>reading</li></ul></html>");
+  }
 }
 
 TEST_CASE("Kemplate#GetTemplate", "calling k.GetTemplate()") {

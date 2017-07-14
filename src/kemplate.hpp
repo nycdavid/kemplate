@@ -8,6 +8,7 @@ using std::map;
 using std::regex;
 using std::sregex_iterator;
 using std::string;
+using std::vector;
 
 #ifndef KEMPLATE_H
 #define KEMPLATE_H
