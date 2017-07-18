@@ -19,6 +19,7 @@ class Depot {
     map<string, string> m_strings;
     map<string, vector<string>> m_lists;
     bool existsInStrings(string key);
+    bool existsInLists(string key);
     void cleanseKey(string key);
 };
 #endif

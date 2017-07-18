@@ -15,14 +15,19 @@ void Depot::Store(string key, vector<string> value) {
 boost::any Depot::Fetch(string key) {
   if (existsInStrings(key)) {
     return m_strings[key];
-  } else {
+  } else if (existsInLists(key)) {
     return m_lists[key];
   }
+  return std::string{""};
 }
 
 // Private
 bool Depot::existsInStrings(string key) {
   return m_strings.find(key) != m_strings.end();
+}
+
+bool Depot::existsInLists(string key) {
+  return m_lists.find(key) != m_lists.end();
 }
 
 void Depot::cleanseKey(string key) {

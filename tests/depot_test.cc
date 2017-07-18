@@ -52,3 +52,14 @@ TEST_CASE("Depot#Store - edge cases", "overwrites the key if it exists") {
     REQUIRE(fetched == "David");
   }
 }
+
+TEST_CASE("Depot#Fetch") {
+  SECTION("when the key does not exist") {
+    SECTION("returns an empty string") {
+      Depot dpt;
+      string fetched = boost::any_cast<string>(dpt.Fetch("non_existent_key"));
+
+      REQUIRE(fetched == "");
+    }
+  }
+}

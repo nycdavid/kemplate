@@ -16,7 +16,7 @@ Kemplate::Kemplate(string tmpl) {
   m_regex = regex("\\{\\{[a-zA-Z_\\s]*\\}\\}");
 }
 
-string Kemplate::Html(map<string, string> data) {
+string Kemplate::Html(Depot data) {
   string result;
   string m_tmplCopy = m_tmpl;
   sregex_iterator begin = regexDataPoints();
@@ -32,9 +32,9 @@ string Kemplate::GetTemplate() {
   return m_tmpl;
 }
 
-string Kemplate::interpolate(string barsKey, map<string, string> data, string &pTmpl) {
+string Kemplate::interpolate(string barsKey, Depot data, string &pTmpl) {
   string strippedKey = handlebarsToKey(barsKey);
-  string value = data[strippedKey];
+  string value = boost::any_cast<string>(data.Fetch(strippedKey));
   std::size_t foundPos = pTmpl.find(barsKey);
   pTmpl.replace(foundPos, barsKey.size(), value);
   return pTmpl;
