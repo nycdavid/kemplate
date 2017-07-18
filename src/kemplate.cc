@@ -15,6 +15,7 @@ using std::string;
 Kemplate::Kemplate(string tmpl) {
   m_tmpl = tmpl;
   m_regex = regex("\\{\\{[a-zA-Z_\\s]*\\}\\}");
+  m_listRegex = regex("\\{\\#each[a-zA-Z_]*\\}\\}.*\\{\\{\\/each\\}\\}");
 }
 
 string Kemplate::Html(Depot data) {
