@@ -16,12 +16,16 @@ class Kemplate {
   public:
     Kemplate(string htmlTemplate = "");
     string Html(Depot data);
+    string HtmlForLists(Depot data);
     string GetTemplate();
   private:
     string m_tmpl;
     regex m_regex;
+    regex m_listRegex;
     string interpolate(string barsKey, Depot data, string &pTmpl);
+    string interpolateList(string capturedMarkup, Depot data, string &pTmpl);
     string handlebarsToKey(string point);
-    sregex_iterator regexDataPoints();
+    sregex_iterator parseForKeys();
+    sregex_iterator parseForKeysThatAreLists();
 };
 #endif

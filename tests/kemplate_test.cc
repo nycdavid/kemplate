@@ -69,7 +69,7 @@ TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
     string tmpl = "<html><ul>{{#each hobbies}}<li>{{hobby}}</li>{{/each}}</ul></html>";
     Kemplate k(tmpl);
 
-    REQUIRE(k.Html(dpt) == "<html><ul><li>music</li><li>programming</li><li>reading</li></ul></html>");
+    REQUIRE(k.HtmlForLists(dpt) == "<html><ul><li>music</li><li>programming</li><li>reading</li></ul></html>");
   }
 }
 
