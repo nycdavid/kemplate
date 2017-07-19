@@ -43,7 +43,6 @@ string Kemplate::HtmlForLists(Depot data) { // TODO: Duplicate code
   sregex_iterator begin = parseForKeysThatAreLists();
   for (sregex_iterator i = begin; i != sregex_iterator(); ++i) {
     std::smatch match = *i;
-    cout << match.str() << endl;
     result = interpolateList(match.str(), data, m_tmplCopy);
   }
   return result;
@@ -51,8 +50,24 @@ string Kemplate::HtmlForLists(Depot data) { // TODO: Duplicate code
 
 string Kemplate::interpolateList(string capturedMarkup, Depot data, string &pTmpl) {
   regex iteratedTag("\\{\\{#each\\s+.*\\}\\}<([a-zA-Z\\d]*)>\\{\\{.*\\}\\}<\\/[a-zA-Z\\d]*>\\{\\{\\/each\\}\\}");
+  string itemsTmpl;
+  std::smatch m;
+  std::regex_search(capturedMarkup, m, iteratedTag);
   std::size_t foundPos = pTmpl.find(capturedMarkup);
-  pTmpl.replace(foundPos, capturedMarkup.size(), "");
+  vector<string> items = boost::any_cast<vector<string>>(data.Fetch("hobbies"));
+  for(int i = 0; i != items.size(); ++i) {
+    string tag;
+    tag.append("<");
+    tag.append(m[1]);
+    tag.append(">");
+    tag.append(items[i]);
+    tag.append("</");
+    tag.append(m[1]);
+    tag.append(">");
+    itemsTmpl.append(tag);
+  }
+
+  pTmpl.replace(foundPos, capturedMarkup.size(), itemsTmpl);
   return pTmpl;
 }
 
