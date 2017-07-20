@@ -55,7 +55,7 @@ string Kemplate::interpolateList(string capturedMarkup, Depot data, string &pTmp
   std::regex_search(capturedMarkup, m, iteratedTag);
   string dataKey = m[1];
   std::size_t foundPos = pTmpl.find(capturedMarkup);
-  vector<string> items = boost::any_cast<vector<string>>(data.Fetch(dataKey)); // TODO key is hard-coded
+  vector<string> items = boost::any_cast<vector<string>>(data.Fetch(dataKey));
   for(int i = 0; i != items.size(); ++i) {
     string tag;
     tag.append("<");
