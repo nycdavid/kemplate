@@ -71,6 +71,18 @@ TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
 
     REQUIRE(k.HtmlForLists(dpt) == "<html><ul><li>music</li><li>programming</li><li>reading</li></ul></html>");
   }
+
+  SECTION("handles multiple array keys") {
+    Depot dpt;
+    vector<string> hobbies = {"music", "reading"};
+    vector<string> fruits = {"apple", "pineapple"};
+    dpt.Store("hobbies", hobbies);
+    dpt.Store("fruits", fruits);
+    string tmpl = "<html><ul>{{#each hobbies}}<li>{{hobby}}</li>{{/each}}</ul><ul>{{#each fruits}}<li>{{fruit}}</li>{{/each}}</ul></html>";
+    Kemplate k(tmpl);
+
+    REQUIRE(k.HtmlForLists(dpt) == "<html><ul><li>music</li><li>reading</li></ul><ul><li>apple</li><li>pineapple</li></ul></html>");
+  }
 }
 
 TEST_CASE("Kemplate#GetTemplate", "calling k.GetTemplate()") {

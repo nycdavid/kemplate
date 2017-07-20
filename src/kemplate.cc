@@ -15,7 +15,7 @@ using std::string;
 Kemplate::Kemplate(string tmpl) {
   m_tmpl = tmpl;
   m_regex = regex("\\{\\{[a-zA-Z_\\s]*\\}\\}");
-  m_listRegex = regex("\\{\\{#each\\s+[a-zA-Z_]*\\}\\}.*\\{\\{\\/each\\}\\}");
+  m_listRegex = regex("\\{\\{#each\\s+[a-zA-Z_]*\\}\\}.*?\\{\\{\\/each\\}\\}");
 }
 
 string Kemplate::Html(Depot data) {
@@ -49,20 +49,21 @@ string Kemplate::HtmlForLists(Depot data) { // TODO: Duplicate code
 }
 
 string Kemplate::interpolateList(string capturedMarkup, Depot data, string &pTmpl) {
-  regex iteratedTag("\\{\\{#each\\s+.*\\}\\}<([a-zA-Z\\d]*)>\\{\\{.*\\}\\}<\\/[a-zA-Z\\d]*>\\{\\{\\/each\\}\\}");
+  regex iteratedTag("\\{\\{#each\\s+(.*)\\}\\}<([a-zA-Z\\d]*)>\\{\\{.*\\}\\}<\\/[a-zA-Z\\d]*>\\{\\{\\/each\\}\\}");
   string itemsTmpl;
   std::smatch m;
   std::regex_search(capturedMarkup, m, iteratedTag);
+  string dataKey = m[1];
   std::size_t foundPos = pTmpl.find(capturedMarkup);
-  vector<string> items = boost::any_cast<vector<string>>(data.Fetch("hobbies"));
+  vector<string> items = boost::any_cast<vector<string>>(data.Fetch(dataKey)); // TODO key is hard-coded
   for(int i = 0; i != items.size(); ++i) {
     string tag;
     tag.append("<");
-    tag.append(m[1]);
+    tag.append(m[2]);
     tag.append(">");
     tag.append(items[i]);
     tag.append("</");
-    tag.append(m[1]);
+    tag.append(m[2]);
     tag.append(">");
     itemsTmpl.append(tag);
   }
@@ -96,7 +97,7 @@ sregex_iterator Kemplate::parseForKeys() {
   return sregex_iterator(m_tmpl.begin(), m_tmpl.end(), m_regex);
 }
 
-sregex_iterator Kemplate::parseForKeysThatAreLists() { // TODO: Duplicate code
+sregex_iterator Kemplate::parseForKeysThatAreLists() {
   return sregex_iterator(m_tmpl.begin(), m_tmpl.end(), m_listRegex);
 }
 >>>>>>> Break out methods into different paths
