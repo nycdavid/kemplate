@@ -25,7 +25,7 @@ class Kemplate {
     string interpolate(string barsKey, Depot data, string &pTmpl);
     string interpolateList(string capturedMarkup, Depot data, string &pTmpl);
     string handlebarsToKey(string point);
-    sregex_iterator parseForKeys();
+    sregex_iterator parseForKeys(string tmpl);
     sregex_iterator parseForKeysThatAreLists();
 };
 #endif

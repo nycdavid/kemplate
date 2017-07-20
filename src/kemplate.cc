@@ -26,10 +26,11 @@ string Kemplate::Html(Depot data) {
   for(int i = 0; i < cells.size(); ++i) {
     result = interpolate(cells[i], data, m_tmplCopy);
   }
-  for (sregex_iterator i; i != sregex_iterator(); ++i) {
+  sregex_iterator beginStrings = parseForKeys(result);
+  for (sregex_iterator i = beginStrings; i != sregex_iterator(); ++i) {
     std::smatch match = *i;
     string barsKey = match.str();
-    result = interpolateList(match.str(), data, result);
+    result = interpolate(barsKey, data, result);
   }
   return result;
 }
@@ -88,3 +89,14 @@ string Kemplate::handlebarsToKey(string point) {
   std::regex_search(point, m, k);
   return m[1];
 }
+<<<<<<< 3139106acf60f1623708c72caca03139d2fe62f1
+=======
+
+sregex_iterator Kemplate::parseForKeys(string tmpl) {
+  return sregex_iterator(tmpl.begin(), tmpl.end(), m_regex);
+}
+
+sregex_iterator Kemplate::parseForKeysThatAreLists() {
+  return sregex_iterator(m_tmpl.begin(), m_tmpl.end(), m_listRegex);
+}
+>>>>>>> wip: need to see what's being returned in the other tests
