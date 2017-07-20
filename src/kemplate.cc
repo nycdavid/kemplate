@@ -21,18 +21,15 @@ Kemplate::Kemplate(string tmpl) {
 string Kemplate::Html(Depot data) {
   string result;
   string m_tmplCopy = m_tmpl;
-<<<<<<< 744d5e59d985457601a8f0a39aeb7c4254b21638
   Parser prsr;
   vector<string> cells = prsr.ParseCells(m_tmplCopy);
   for(int i = 0; i < cells.size(); ++i) {
     result = interpolate(cells[i], data, m_tmplCopy);
-=======
-  sregex_iterator begin = parseForKeys();
-  for (sregex_iterator i = begin; i != sregex_iterator(); ++i) {
+  }
+  for (sregex_iterator i; i != sregex_iterator(); ++i) {
     std::smatch match = *i;
     string barsKey = match.str();
-    result = interpolate(barsKey, data, m_tmplCopy);
->>>>>>> Break out methods into different paths
+    result = interpolateList(match.str(), data, result);
   }
   return result;
 }
@@ -43,7 +40,8 @@ string Kemplate::HtmlForLists(Depot data) { // TODO: Duplicate code
   sregex_iterator begin = parseForKeysThatAreLists();
   for (sregex_iterator i = begin; i != sregex_iterator(); ++i) {
     std::smatch match = *i;
-    result = interpolateList(match.str(), data, m_tmplCopy);
+    string barsKey = match.str();
+    result = interpolateList(barsKey, data, m_tmplCopy);
   }
   return result;
 }
@@ -90,14 +88,3 @@ string Kemplate::handlebarsToKey(string point) {
   std::regex_search(point, m, k);
   return m[1];
 }
-<<<<<<< 744d5e59d985457601a8f0a39aeb7c4254b21638
-=======
-
-sregex_iterator Kemplate::parseForKeys() {
-  return sregex_iterator(m_tmpl.begin(), m_tmpl.end(), m_regex);
-}
-
-sregex_iterator Kemplate::parseForKeysThatAreLists() {
-  return sregex_iterator(m_tmpl.begin(), m_tmpl.end(), m_listRegex);
-}
->>>>>>> Break out methods into different paths

@@ -69,7 +69,7 @@ TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
     string tmpl = "<html><ul>{{#each hobbies}}<li>{{hobby}}</li>{{/each}}</ul></html>";
     Kemplate k(tmpl);
 
-    REQUIRE(k.HtmlForLists(dpt) == "<html><ul><li>music</li><li>programming</li><li>reading</li></ul></html>");
+    REQUIRE(k.Html(dpt) == "<html><ul><li>music</li><li>programming</li><li>reading</li></ul></html>");
   }
 
   SECTION("handles multiple array keys") {
@@ -81,7 +81,7 @@ TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
     string tmpl = "<html><ul>{{#each hobbies}}<li>{{hobby}}</li>{{/each}}</ul><ul>{{#each fruits}}<li>{{fruit}}</li>{{/each}}</ul></html>";
     Kemplate k(tmpl);
 
-    REQUIRE(k.HtmlForLists(dpt) == "<html><ul><li>music</li><li>reading</li></ul><ul><li>apple</li><li>pineapple</li></ul></html>");
+    REQUIRE(k.Html(dpt) == "<html><ul><li>music</li><li>reading</li></ul><ul><li>apple</li><li>pineapple</li></ul></html>");
   }
 }
 
