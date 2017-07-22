@@ -66,7 +66,7 @@ TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
     Depot dpt;
     vector<string> hobbies = {"music", "programming", "reading"};
     dpt.Store("hobbies", hobbies);
-    string tmpl = "<html><ul>{{#each hobbies}}<li>{{hobby}}</li>{{/each}}</ul></html>";
+    string tmpl = "<html><ul>{{#each hobbies}}<li>{{do hobby}}</li>{{/each}}</ul></html>";
     Kemplate k(tmpl);
 
     REQUIRE(k.Html(dpt) == "<html><ul><li>music</li><li>programming</li><li>reading</li></ul></html>");
@@ -78,7 +78,7 @@ TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
     vector<string> fruits = {"apple", "pineapple"};
     dpt.Store("hobbies", hobbies);
     dpt.Store("fruits", fruits);
-    string tmpl = "<html><ul>{{#each hobbies}}<li>{{hobby}}</li>{{/each}}</ul><ul>{{#each fruits}}<li>{{fruit}}</li>{{/each}}</ul></html>";
+    string tmpl = "<html><ul>{{#each hobbies}}<li>{{do hobby}}</li>{{/each}}</ul><ul>{{#each fruits}}<li>{{do fruit}}</li>{{/each}}</ul></html>";
     Kemplate k(tmpl);
 
     REQUIRE(k.Html(dpt) == "<html><ul><li>music</li><li>reading</li></ul><ul><li>apple</li><li>pineapple</li></ul></html>");

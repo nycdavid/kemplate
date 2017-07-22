@@ -14,55 +14,20 @@ using std::string;
 // Constructor
 Kemplate::Kemplate(string tmpl) {
   m_tmpl = tmpl;
-  m_regex = regex("\\{\\{[a-zA-Z_\\s]*\\}\\}");
-  m_listRegex = regex("\\{\\{#each\\s+[a-zA-Z_]*\\}\\}.*?\\{\\{\\/each\\}\\}");
 }
 
 string Kemplate::Html(Depot data) {
   string result;
-  string m_tmplCopy = m_tmpl;
   Parser prsr;
-  vector<string> cells = prsr.ParseCells(m_tmplCopy);
+  vector<string> cells = prsr.ParseCells(m_tmpl);
+  vector<string> lists = prsr.ParseLists(m_tmpl);
   for(int i = 0; i < cells.size(); ++i) {
-    result = interpolate(cells[i], data, m_tmplCopy);
+    result = interpolate(cells[i], data, m_tmpl);
+  }
+  for(int i = 0; i < lists.size(); ++i) {
+    result = interpolateList(lists[i], data, result);
   }
   return result;
-}
-
-string Kemplate::HtmlForLists(Depot data) { // TODO: Duplicate code
-  string result;
-  string m_tmplCopy = m_tmpl;
-  sregex_iterator begin = parseForKeysThatAreLists();
-  for (sregex_iterator i = begin; i != sregex_iterator(); ++i) {
-    std::smatch match = *i;
-    string barsKey = match.str();
-    result = interpolateList(barsKey, data, m_tmplCopy);
-  }
-  return result;
-}
-
-string Kemplate::interpolateList(string capturedMarkup, Depot data, string &pTmpl) {
-  regex iteratedTag("\\{\\{#each\\s+(.*)\\}\\}<([a-zA-Z\\d]*)>\\{\\{.*\\}\\}<\\/[a-zA-Z\\d]*>\\{\\{\\/each\\}\\}");
-  string itemsTmpl;
-  std::smatch m;
-  std::regex_search(capturedMarkup, m, iteratedTag);
-  string dataKey = m[1];
-  std::size_t foundPos = pTmpl.find(capturedMarkup);
-  vector<string> items = boost::any_cast<vector<string>>(data.Fetch(dataKey));
-  for(int i = 0; i != items.size(); ++i) {
-    string tag;
-    tag.append("<");
-    tag.append(m[2]);
-    tag.append(">");
-    tag.append(items[i]);
-    tag.append("</");
-    tag.append(m[2]);
-    tag.append(">");
-    itemsTmpl.append(tag);
-  }
-
-  pTmpl.replace(foundPos, capturedMarkup.size(), itemsTmpl);
-  return pTmpl;
 }
 
 string Kemplate::GetTemplate() {
@@ -75,6 +40,11 @@ string Kemplate::interpolate(string barsKey, Depot data, string &pTmpl) {
   std::size_t foundPos = pTmpl.find(barsKey);
   pTmpl.replace(foundPos, barsKey.size(), value);
   return pTmpl;
+}
+
+string Kemplate::interpolateList(string listBlock, Depot data, string &pTmpl) {
+  cout << listBlock << endl;
+  return "foo";
 }
 
 string Kemplate::handlebarsToKey(string point) {
