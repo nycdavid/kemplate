@@ -2,6 +2,7 @@
 #include <map>
 #include <regex>
 #include "kemplate.hpp"
+#include "parser.hpp"
 
 using std::cout;
 using std::endl;
@@ -19,11 +20,10 @@ Kemplate::Kemplate(string tmpl) {
 string Kemplate::Html(Depot data) {
   string result;
   string m_tmplCopy = m_tmpl;
-  sregex_iterator begin = regexDataPoints();
-  for (sregex_iterator i = begin; i != sregex_iterator(); ++i) {
-    std::smatch match = *i;
-    string barsKey = match.str();
-    result = interpolate(barsKey, data, m_tmplCopy);
+  Parser prsr;
+  vector<string> cells = prsr.ParseCells(m_tmplCopy);
+  for(int i = 0; i < cells.size(); ++i) {
+    result = interpolate(cells[i], data, m_tmplCopy);
   }
   return result;
 }
@@ -45,8 +45,4 @@ string Kemplate::handlebarsToKey(string point) {
   std::smatch m;
   std::regex_search(point, m, k);
   return m[1];
-}
-
-sregex_iterator Kemplate::regexDataPoints() {
-  return sregex_iterator(m_tmpl.begin(), m_tmpl.end(), m_regex);
 }
