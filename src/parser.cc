@@ -1,13 +1,20 @@
+#include <iostream>
 #include "parser.hpp"
 
 // Public
 Parser::Parser() {
   m_listRegex = regex("\\{\\{#each\\s+[a-zA-Z_]*\\}\\}[a-zA-Z\\/<>]+\\{\\{do [a-zA-Z_]+\\}\\}[a-zA-Z\\/<>]+\\{\\{\\/each\\}\\}");
+  m_listPartsRegex = regex("\\{\\{#each\\s+([a-zA-Z_]+)\\}\\}.*\\{\\{do ([a-zA-Z_]+)\\}\\}.*\\{\\{\\/each\\}\\}");
   m_cellRegex = regex("\\{\\{\\s*[a-zA-Z_]*\\s*\\}\\}");
 }
 
-vector<string> Parser::ParseLists(string tmpl) {
-  return parseAndStore(tmpl, m_listRegex);
+vector<map<string, string>> Parser::ParseLists(string tmpl) {
+  vector<map<string, string>> foo;
+  vector<string> listBlocks = parseAndStore(tmpl, m_listRegex);
+  for (int i = 0; i < listBlocks.size(); ++i) {
+    foo.push_back(parseListForInfo(listBlocks[i]));
+  }
+  return foo;
 }
 
 vector<string> Parser::ParseCells(string tmpl) {
@@ -23,4 +30,11 @@ vector<string> Parser::parseAndStore(string tmpl, regex rgx) {
     items.push_back(match.str());
   }
   return items;
+}
+
+map<string, string> Parser::parseListForInfo(string listBlock) {
+  std::smatch matches;
+  std::regex_search(listBlock, matches, m_listPartsRegex);
+  map<string, string> info = { {"listBlock", listBlock}, {"depotKey", matches[1]}, {"cellKey", matches[2]} };
+  return info;
 }
