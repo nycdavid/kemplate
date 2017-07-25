@@ -20,7 +20,7 @@ string Kemplate::Html(Depot data) {
   string result;
   Parser prsr;
   vector<string> cells = prsr.ParseCells(m_tmpl);
-  vector<string> lists = prsr.ParseLists(m_tmpl);
+  vector<map<string, string>> lists = prsr.ParseLists(m_tmpl);
   for(int i = 0; i < cells.size(); ++i) {
     result = interpolate(cells[i], data, m_tmpl);
   }
@@ -42,8 +42,9 @@ string Kemplate::interpolate(string barsKey, Depot data, string &pTmpl) {
   return pTmpl;
 }
 
-string Kemplate::interpolateList(string listBlock, Depot data, string &pTmpl) {
-  cout << listBlock << endl;
+string Kemplate::interpolateList(map<string, string> listObj, Depot data, string &pTmpl) {
+  // cout << listObj["depotKey"] << endl;
+  vector<string> listItems = boost::any_cast<vector<string>>(data.Fetch(listObj["depotKey"]));
   return "foo";
 }
 

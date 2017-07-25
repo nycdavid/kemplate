@@ -20,7 +20,7 @@ class Kemplate {
   private:
     string m_tmpl;
     string interpolate(string barsKey, Depot data, string &pTmpl);
-    string interpolateList(string listBlock, Depot data, string &pTmpl);
+    string interpolateList(map<string, string> listObj, Depot data, string &pTmpl);
     string handlebarsToKey(string point);
 };
 #endif
