@@ -25,6 +25,7 @@ TEST_CASE("Parser#FindLists") {
     vector<map<string, string>> lists = prsr.ParseLists(tmpl);
 
     REQUIRE(lists[0]["listBlock"] == "{{#each fruits}}<li>{{do fruit}}</li>{{/each}}");
+    REQUIRE(lists[0]["blockBody"] == "<li>{{do fruit}}</li>");
   }
 
   SECTION("it parses multiple lists in a template string") {
