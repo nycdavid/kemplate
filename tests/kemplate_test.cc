@@ -4,62 +4,62 @@
 
 TEST_CASE("Kemplate#Html", "calling k.Html(map<string, string> data)") {
   SECTION("interpolates a single occurrence") {
-    Depot dpt;
-    dpt.Store("name", "David");
     string tmpl = "<html>{{name}}</html>";
     Kemplate k(tmpl);
+    Depot* dpt = k.GetDepot();
+    dpt->Store("name", "David");
 
-    REQUIRE(k.Html(dpt) == "<html>David</html>");
+    REQUIRE(k.Html() == "<html>David</html>");
   }
 
   SECTION("interpolates multiple occurrences") {
-    Depot dpt;
-    dpt.Store("name", "David");
     string tmpl = "<html>{{name}}.{{name}}</html>";
     Kemplate k(tmpl);
+    Depot* dpt = k.GetDepot();
+    dpt->Store("name", "David");
 
-    REQUIRE(k.Html(dpt) == "<html>David.David</html>");
+    REQUIRE(k.Html() == "<html>David.David</html>");
   }
 
   SECTION("interpolates different keys") {
-    Depot dpt;
-    dpt.Store("name", "David Ko");
-    dpt.Store("job", "Software Engineer");
     string tmpl = "<html>{{name}}: {{job}}</html>";
     Kemplate k(tmpl);
+    Depot* dpt = k.GetDepot();
+    dpt->Store("name", "David Ko");
+    dpt->Store("job", "Software Engineer");
 
-    REQUIRE(k.Html(dpt) == "<html>David Ko: Software Engineer</html>");
+    REQUIRE(k.Html() == "<html>David Ko: Software Engineer</html>");
   }
 
   SECTION("allows for keys in the data object that are not used") {
-    Depot dpt;
-    dpt.Store("name", "David Ko");
-    dpt.Store("job", "Software Engineer");
-    dpt.Store("foo", "bar");
     string tmpl = "<html>{{name}}: {{job}}</html>";
     Kemplate k(tmpl);
+    Depot* dpt = k.GetDepot();
+    dpt->Store("name", "David Ko");
+    dpt->Store("job", "Software Engineer");
+    dpt->Store("foo", "bar");
 
-    REQUIRE(k.Html(dpt) == "<html>David Ko: Software Engineer</html>");
+    REQUIRE(k.Html() == "<html>David Ko: Software Engineer</html>");
   }
 
   SECTION("interpolates empty space for a key that does not exist in the data object") {
-    Depot dpt;
-    dpt.Store("name", "David Ko");
-    dpt.Store("job", "Software Engineer");
     string tmpl = "<html>{{name}}: {{job}}<p>{{foo}}</p></html>";
     Kemplate k(tmpl);
+    Depot* dpt = k.GetDepot();
+    dpt->Store("name", "David Ko");
+    dpt->Store("job", "Software Engineer");
 
-    REQUIRE(k.Html(dpt) == "<html>David Ko: Software Engineer<p></p></html>");
+    REQUIRE(k.Html() == "<html>David Ko: Software Engineer<p></p></html>");
   }
 
   SECTION("interpolates a Handlebars datapoint with whitespace between the key and the brace") {
-    Depot dpt;
-    dpt.Store("name", "David Ko");
-    dpt.Store("job", "Software Engineer");
     string tmpl = "<html>{{ name}}: {{job }}<p>{{foo  }}</p></html>";
     Kemplate k(tmpl);
+    Depot* dpt = k.GetDepot();
+    dpt->Store("name", "David Ko");
+    dpt->Store("job", "Software Engineer");
 
-    REQUIRE(k.Html(dpt) == "<html>David Ko: Software Engineer<p></p></html>");
+    REQUIRE(k.Html() == "<html>David Ko: Software Engineer<p></p></html>");
   }
 }
 

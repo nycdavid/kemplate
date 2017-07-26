@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "depot.hpp"
+#include "parser.hpp"
 
 using std::map;
 using std::regex;
@@ -14,12 +15,14 @@ using std::string;
 class Kemplate {
   public:
     Kemplate(string htmlTemplate = "");
-    string Html(Depot data);
+    string Html();
     string GetTemplate();
+    Depot* GetDepot();
   private:
+    Depot m_depot;
     string m_tmpl;
     regex m_regex;
-    string interpolate(string barsKey, Depot data, string &pTmpl);
+    string interpolate(string barsKey, string &pTmpl);
     string handlebarsToKey(string point);
     sregex_iterator regexDataPoints();
 };

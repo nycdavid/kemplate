@@ -2,7 +2,6 @@
 #include <map>
 #include <regex>
 #include "kemplate.hpp"
-#include "parser.hpp"
 
 using std::cout;
 using std::endl;
@@ -13,17 +12,18 @@ using std::string;
 
 // Constructor
 Kemplate::Kemplate(string tmpl) {
+  Depot m_depot;
   m_tmpl = tmpl;
   m_regex = regex("\\{\\{[a-zA-Z_\\s]*\\}\\}");
 }
 
-string Kemplate::Html(Depot data) {
+string Kemplate::Html() {
   string result;
   string m_tmplCopy = m_tmpl;
   Parser prsr;
   vector<string> cells = prsr.ParseCells(m_tmplCopy);
   for(int i = 0; i < cells.size(); ++i) {
-    result = interpolate(cells[i], data, m_tmplCopy);
+    result = interpolate(cells[i], m_tmplCopy);
   }
   return result;
 }
@@ -32,9 +32,13 @@ string Kemplate::GetTemplate() {
   return m_tmpl;
 }
 
-string Kemplate::interpolate(string barsKey, Depot data, string &pTmpl) {
+Depot* Kemplate::GetDepot() {
+  return &m_depot;
+}
+
+string Kemplate::interpolate(string barsKey, string &pTmpl) {
   string strippedKey = handlebarsToKey(barsKey);
-  string value = boost::any_cast<string>(data.Fetch(strippedKey));
+  string value = boost::any_cast<string>(m_depot.Fetch(strippedKey));
   std::size_t foundPos = pTmpl.find(barsKey);
   pTmpl.replace(foundPos, barsKey.size(), value);
   return pTmpl;
