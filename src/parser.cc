@@ -9,12 +9,12 @@ Parser::Parser() {
 }
 
 vector<map<string, string>> Parser::ParseLists(string tmpl) {
-  vector<map<string, string>> foo;
+  vector<map<string, string>> lists;
   vector<string> listBlocks = parseAndStore(tmpl, m_listRegex);
   for (int i = 0; i < listBlocks.size(); ++i) {
-    foo.push_back(parseListForInfo(listBlocks[i]));
+    lists.push_back(parseListForInfo(listBlocks[i]));
   }
-  return foo;
+  return lists;
 }
 
 vector<string> Parser::ParseCells(string tmpl) {

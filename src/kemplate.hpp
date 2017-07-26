@@ -23,7 +23,7 @@ class Kemplate {
     string m_tmpl;
     regex m_regex;
     string interpolate(string handlebarsKey, string value, string &pTmpl);
+    string interpolateList(map<string, string> listObj, string &pTmpl);
     string handlebarsToKey(string point);
-    sregex_iterator regexDataPoints();
 };
 #endif

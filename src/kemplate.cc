@@ -18,14 +18,17 @@ Kemplate::Kemplate(string tmpl) {
 }
 
 string Kemplate::Html() {
-  string result;
-  string m_tmplCopy = m_tmpl;
+  string result = m_tmpl;
   Parser prsr;
-  vector<string> cells = prsr.ParseCells(m_tmplCopy);
+  vector<string> cells = prsr.ParseCells(m_tmpl);
+  vector<map<string, string>> lists = prsr.ParseLists(m_tmpl);
   for(int i = 0; i < cells.size(); ++i) {
     string strippedKey = handlebarsToKey(cells[i]);
     string value = boost::any_cast<string>(m_depot.Fetch(strippedKey));
-    result = interpolate(cells[i], value, m_tmplCopy);
+    result = interpolate(cells[i], value, result);
+  }
+  for(int i = 0; i < lists.size(); ++i) {
+    result = interpolateList(lists[i], result);
   }
   return result;
 }
@@ -41,6 +44,20 @@ Depot* Kemplate::GetDepot() {
 string Kemplate::interpolate(string handlebarsKey, string value, string &pTmpl) {
   std::size_t foundPos = pTmpl.find(handlebarsKey);
   pTmpl.replace(foundPos, handlebarsKey.size(), value);
+  return pTmpl;
+}
+
+string Kemplate::interpolateList(map<string, string> listObj, string &pTmpl) {
+  string replacementStr;
+  string listBlock = listObj["listBlock"];
+  vector<string> items = boost::any_cast<vector<string>>(m_depot.Fetch(listObj["depotKey"]));
+  for (int i = 0; i < items.size(); ++i) {
+    string blockBody = listObj["blockBody"];
+    string appendStr = interpolate(listObj["doElement"], items[i], blockBody);
+    replacementStr.append(appendStr);
+  }
+  std::size_t foundPos = pTmpl.find(listBlock);
+  pTmpl.replace(foundPos, listBlock.size(), replacementStr);
   return pTmpl;
 }
 
