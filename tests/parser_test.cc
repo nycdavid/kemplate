@@ -16,7 +16,7 @@ TEST_CASE("Parser#FindLists") {
     vector<map<string, string>> lists = prsr.ParseLists(tmpl);
 
     REQUIRE(lists[0]["depotKey"] == "fruits");
-    REQUIRE(lists[0]["cellKey"] == "fruit");
+    REQUIRE(lists[0]["doElement"] == "{{do fruit}}");
   }
 
   SECTION("parses a list and returns the original list block") {

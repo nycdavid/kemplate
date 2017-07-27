@@ -4,7 +4,7 @@
 // Public
 Parser::Parser() {
   m_listRegex = regex("\\{\\{#each\\s+[a-zA-Z_]*\\}\\}[a-zA-Z\\/<>]+\\{\\{do [a-zA-Z_]+\\}\\}[a-zA-Z\\/<>]+\\{\\{\\/each\\}\\}");
-  m_listPartsRegex = regex("\\{\\{#each\\s+([a-zA-Z_]+)\\}\\}(.*\\{\\{do ([a-zA-Z_]+)\\}\\}.*)\\{\\{\\/each\\}\\}");
+  m_listPartsRegex = regex("\\{\\{#each\\s+([a-zA-Z_]+)\\}\\}(.*(\\{\\{do [a-zA-Z_]+\\}\\}).*)\\{\\{\\/each\\}\\}");
   m_cellRegex = regex("\\{\\{\\s*[a-zA-Z_]*\\s*\\}\\}");
 }
 
@@ -39,7 +39,7 @@ map<string, string> Parser::parseListForInfo(string listBlock) {
     {"listBlock", listBlock},
     {"depotKey", matches[1]},
     {"blockBody", matches[2]},
-    {"cellKey", matches[3]}
+    {"doElement", matches[3]}
   };
   return info;
 }
