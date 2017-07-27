@@ -23,7 +23,9 @@ string Kemplate::Html() {
   Parser prsr;
   vector<string> cells = prsr.ParseCells(m_tmplCopy);
   for(int i = 0; i < cells.size(); ++i) {
-    result = interpolate(cells[i], m_tmplCopy);
+    string strippedKey = handlebarsToKey(cells[i]);
+    string value = boost::any_cast<string>(m_depot.Fetch(strippedKey));
+    result = interpolate(cells[i], value, m_tmplCopy);
   }
   return result;
 }
@@ -36,11 +38,9 @@ Depot* Kemplate::GetDepot() {
   return &m_depot;
 }
 
-string Kemplate::interpolate(string barsKey, string &pTmpl) {
-  string strippedKey = handlebarsToKey(barsKey);
-  string value = boost::any_cast<string>(m_depot.Fetch(strippedKey));
-  std::size_t foundPos = pTmpl.find(barsKey);
-  pTmpl.replace(foundPos, barsKey.size(), value);
+string Kemplate::interpolate(string handlebarsKey, string value, string &pTmpl) {
+  std::size_t foundPos = pTmpl.find(handlebarsKey);
+  pTmpl.replace(foundPos, handlebarsKey.size(), value);
   return pTmpl;
 }
 

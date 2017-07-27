@@ -22,7 +22,7 @@ class Kemplate {
     Depot m_depot;
     string m_tmpl;
     regex m_regex;
-    string interpolate(string barsKey, string &pTmpl);
+    string interpolate(string handlebarsKey, string value, string &pTmpl);
     string handlebarsToKey(string point);
     sregex_iterator regexDataPoints();
 };
